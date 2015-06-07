@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='css/main.css' />
+    <script src="js/react.js"></script>
+    <script src="js/JSXTransformer.js"></script>
+  </head>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/jsx">
+      var App = React.createClass({
+        getInitialState: function() {
+          return {data: []};
+        },
+        handleTodoSubmit: function(todo) {
+          console.log("TODO: " + todo);
+          $.ajax({
+            method: 'POST',
+            contentType: "application/json",
+            url: 'http://localhost:3000/todos.json',
+            data: JSON.stringify(todo),
+            success: function(data) { console.log("Success"); }.bind(this)
+          });
+        },
+        render: function() {
+          return (
+            <div>
+              <h1>GeoTODO</h1>
+              <TodoForm onTodoSubmit={this.handleTodoSubmit} />
+            </div>
+          );
+        }
+      });
+
+      var TodoForm = React.createClass({
+        getInitialState: function() {
+          return {reminders: []};
+        },
+        handleSubmit: function(e) {
+          e.preventDefault();
+
+          var loc = React.findDOMNode(this.refs.location).value.trim();
+          var todo = React.findDOMNode(this.refs.todo).value.trim();
+          this.props.onTodoSubmit({todo: todo, location: loc});
+        },
+        render: function() {
+          return (
+            <div>
+              <div className="form-group">
+                <label>When I am at:</label>
+                <input type="text" className="form-control" placeholder="Enter name of place" ref="location" />
+              </div>
+              <div className="form-group">
+                <label>Remind me to</label>
+                <textarea className="form-control" rows="3" placeholder="What do you want to be reminded of?" ref="todo"></textarea>
+              </div>
+              <button className="btn btn-primary" onClick={this.handleSubmit}>Create</button>
+            </div>
+          );
+        }
+      });
+
+      React.render(<App txt="this is the txt prop" />, document.body);
+    </script>
+  </body>
+</html>
