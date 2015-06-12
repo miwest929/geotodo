@@ -7,14 +7,16 @@
     "watch": "watchify app.js -o public/js/bundle.js -v",
     "browserify": "browserify app.js | uglifyjs > public/js/bundle.js",
     "build": "npm run browserify ",
-    "start": "npm run watch & nodemon server.js"
+    "start": "npm run watch & nodemon server.js",
+    "loadgeo": "node loadgeo.js"
   },
   "author": "Michael West",
   "dependencies": {
     "express": "~4.9.7",
     "pg": "^4.1.1",
     "q": "^1.1.2",
-    "body-parser":"*"
+    "body-parser":"*",
+    "csv": "*"
   },
   "devDependencies": {
     "browserify": "~6.0.3",
