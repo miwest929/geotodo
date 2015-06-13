@@ -18,6 +18,7 @@ app.use(bodyParser());
 
 // Set /public as our static content dir
 app.use("/", express.static(__dirname + "/public/"));
+app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 app.post('/todos.json', function(req, res, next) {
   var data = req.body;
