@@ -21,6 +21,7 @@ app.use("/", express.static(__dirname + "/public/"));
 app.use('/bower_components', express.static(__dirname + '/bower_components'));
 
 app.post('/todos.json', function(req, res, next) {
+
   var data = req.body;
   pg.connect(connectionString, function(err, client, done) {
     client.query("INSERT INTO todos(todo_text, place) values($1, $2)", [data.todo, data.location]);
@@ -34,8 +35,10 @@ app.post('/todos.json', function(req, res, next) {
 });
 
 app.get('/cities', function(req, res, next) {
-  var prefix = req.query.city;
+    var prefix = req.query.city;
   var matches = [];
+
+  console.log("Cities route with city='" + prefix + "' has been invoked.");
 
   pg.connect(connectionString, function(err, client, done) {
     client.query("SELECT DISTINCT * FROM locations WHERE name LIKE '" + prefix + "%';",
@@ -43,7 +46,8 @@ app.get('/cities', function(req, res, next) {
       if (err) { console.log(err); }
       else {
         matches = result.rows.map(function(record) { return record.name; });
-        res.status(200).send(matches);
+        res.setHeader('content-type', 'application/json');
+        res.status(200).send({data: matches});
       }
     });
   });
