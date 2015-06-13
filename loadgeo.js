@@ -5,8 +5,10 @@ var pg = require('pg'),
      fs = require('fs');
 
 var connectionString = process.env.DATABASE_URL || 'postgres://mwest@localhost/geotodo';
+var client = new pg.Client(connectionString);
 var parser = csv.parse({delimiter: ','}, function(err, data){
-  pg.connect(connectionString, function(err, client, done) {
+  client.connect(function(err) {
+  //pg.connect(connectionString, function(err, client, done) {
     // Truncate 'locations' table
     client.query("TRUNCATE locations");
 
@@ -22,8 +24,13 @@ var parser = csv.parse({delimiter: ','}, function(err, data){
         console.log("Stored location information for the city '" + city[3] + "'");
       }
     });
+
+    // close the connection
+    //
   });
 });
 
 fs.createReadStream(__dirname + '/data/geocities/GeoLiteCity-Location.csv')
   .pipe(parser);
+
+client.end();

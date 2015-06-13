@@ -32,6 +32,22 @@ app.post('/todos.json', function(req, res, next) {
   res.status(201).send("Success");
 });
 
+app.get('/cities', function(req, res, next) {
+  var prefix = req.query.city;
+  var matches = [];
+
+  pg.connect(connectionString, function(err, client, done) {
+    client.query("SELECT DISTINCT * FROM locations WHERE name LIKE '" + prefix + "%';",
+    function(err, result) {
+      if (err) { console.log(err); }
+      else {
+        matches = result.rows.map(function(record) { return record.name; });
+        res.status(200).send(matches);
+      }
+    });
+  });
+});
+
 // Fire it up (start our server)
 var server = http.createServer(app).listen(port, function() {
   console.log('Express server listening on port ' + port);
