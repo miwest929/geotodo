@@ -45,7 +45,10 @@ app.get('/cities', function(req, res, next) {
     function(err, result) {
       if (err) { console.log(err); }
       else {
-        matches = result.rows.map(function(record) { return record.name; });
+        matches = result.rows.map(function(record) {
+          return {name: record.name, country: record.country, id: record.id};
+        });
+        console.log(matches);
         res.setHeader('content-type', 'application/json');
         res.status(200).send({data: matches});
       }

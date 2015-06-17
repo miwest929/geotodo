@@ -55,10 +55,10 @@
             minLength: 1,
           },
           {
-            name: 'states',
+            name: 'cities',
             source: function (query, sync, async) {
               return $.get('cities', { city: query }, function (data) {
-                return async(data.data.slice(0,11));
+                return async(data.data.slice(0,11).map(function(it) {return (it.name + ", " + it.country);}));
               });
             }
           });
