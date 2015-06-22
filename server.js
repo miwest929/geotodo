@@ -4,7 +4,8 @@ var express = require('express'),
   pg = require('pg'),
   q = require('q'),
   config = require('./config'),
-  bodyParser = require('body-parser');
+  bodyParser = require('body-parser'),
+  paginate = require('express-paginate');
 
 // Create an express instance and set a port variable
 var app = express();
