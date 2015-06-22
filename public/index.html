@@ -58,9 +58,12 @@
             name: 'cities',
             source: function (query, sync, async) {
               return $.get('cities', { city: query }, function (data) {
-                return async(data.data.slice(0,11).map(function(it) {return (it.name + ", " + it.country);}));
+                return async(data.data.map(function(it) {return (it.name + ", " + it.country);}));
               });
             }
+          }).on('typeahead:selected', function(object, data) {
+            console.log(object);
+            console.log(data);
           });
         },
         render: function() {
@@ -71,10 +74,10 @@
                 <div id="scrollable-dropdown-menu">
                   <input type="text" className="typeahead form-control" placeholder="Enter name of place" ref="location" />
                 </div>
-                <div className="form-group">
-                  <label>Remind me to</label>
-                  <textarea className="form-control" rows="3" placeholder="What do you want to be reminded of?" ref="todo"></textarea>
-                </div>
+              </div>
+              <div className="form-group">
+                <label>Remind me to</label>
+                <textarea className="form-control" rows="3" placeholder="What do you want to be reminded of?" ref="todo"></textarea>
               </div>
               <button className="btn btn-primary" onClick={this.handleSubmit}>Create</button>
             </div>

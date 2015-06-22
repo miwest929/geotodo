@@ -41,16 +41,19 @@ app.get('/cities', function(req, res, next) {
   console.log("Cities route with city='" + prefix + "' has been invoked.");
 
   pg.connect(connectionString, function(err, client, done) {
-    client.query("SELECT DISTINCT * FROM locations WHERE name LIKE '" + prefix + "%';",
+    client.query("SELECT DISTINCT * FROM locations WHERE name LIKE '" + prefix.toLowerCase() + "%';",
     function(err, result) {
       if (err) { console.log(err); }
       else {
         matches = result.rows.map(function(record) {
           return {name: record.name, country: record.country, id: record.id};
         });
-        console.log(matches);
+
+        var filteredMatches = matches.slice(0, 50);
+        console.log(filteredMatches);
+
         res.setHeader('content-type', 'application/json');
-        res.status(200).send({data: matches});
+        res.status(200).send({data: filteredMatches});
       }
     });
   });
