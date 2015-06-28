@@ -36,8 +36,7 @@ app.post('/todos.json', function(req, res, next) {
 });
 
 app.get('/cities', function(req, res, next) {
-    var prefix = req.query.city;
-  var matches = [];
+  var prefix = req.query.city;
 
   console.log("Cities route with city='" + prefix + "' has been invoked.");
 
@@ -46,16 +45,19 @@ app.get('/cities', function(req, res, next) {
     function(err, result) {
       if (err) { console.log(err); }
       else {
-        matches = result.rows.map(function(record) {
+        var filteredMatches = result.rows.slice(0, 10);
+        filteredMatches = filteredMatches.map(function(record) {
           return {name: record.name, country: record.country, id: record.id};
         });
 
-        var filteredMatches = matches.slice(0, 50);
         console.log(filteredMatches);
 
         res.setHeader('content-type', 'application/json');
         res.status(200).send({data: filteredMatches});
       }
+
+      // This call releasing the client back to the cinnection pool
+      done();
     });
   });
 });
